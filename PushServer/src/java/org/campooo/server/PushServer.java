@@ -29,16 +29,6 @@ public final class PushServer {
 
 	private static final Logger Log = Logger.getLogger(PushServer.class);
 
-	static {
-		// init log
-		Properties prop = new Properties();
-		prop.setProperty("log4j.rootLogger", "DEBUG, CONSOLE");
-		prop.setProperty("log4j.appender.CONSOLE", "org.apache.log4j.ConsoleAppender");
-		prop.setProperty("log4j.appender.CONSOLE.layout", "org.apache.log4j.PatternLayout");
-		prop.setProperty("log4j.appender.CONSOLE.layout.ConversionPattern", "%d{HH:mm:ss,SSS} [%t] %-5p %C{1} %x : %m%n");
-		PropertyConfigurator.configure(prop);
-	}
-
 	private static PushServer instance;
 
 	private String name;

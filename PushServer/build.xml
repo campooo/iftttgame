@@ -21,6 +21,8 @@
 	<!-- dir work -->
 	<property name="work.dir" value="${basedir}/work" />
 	<property name="compile.dir" value="${work.dir}/classes" />
+	<!-- dir log -->
+	<property name="log.dir" value="${basedir}/logs" />
 	<!-- jar -->
 	<property name="jar.name" value="${project.name}-${project.version}.jar" />
 	<property name="jar.starter.name" value="starter-${project.version}.jar" />
@@ -74,6 +76,7 @@
 		<tstamp />
 		<mkdir dir="${work.dir}" />
 		<mkdir dir="${target.dir}" />
+		<mkdir dir="${log.dir}" />
 	</target>
 
 	<!-- make startup jar -->
