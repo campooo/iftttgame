@@ -1,0 +1,9 @@
+name               | version           |
+----------------------------------------
+log4j              | 1.2.17            |
+dom4j              | 1.6.1             |
+mina-core          | 2.0.9             |
+mina-http          | 2.0.9             |
+slf4j-api          | 1.7.7             |
+slf4j-log4j12      | 1.7.7             |
+gson               | 2.2.1             |

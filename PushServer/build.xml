@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="pushserver" default="build" basedir=".">
+
+	<description>
+		a module server.
+	</description>
+
+	<!-- =================================================== -->
+	<!-- global properties -->
+	<!-- =================================================== -->
+	<property name="project.name" value="pushserver" />
+	<property name="project.version" value="0.1.0" />
+	<!-- dir src -->
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="src.java.dir" value="${src.dir}/java" />
+	<property name="src.conf.dir" value="${src.dir}/conf" />
+	<!-- dir build -->
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="lib.build.dir" value="${build.dir}/lib" />
+	<property name="lib.merge.dir" value="${lib.build.dir}/merge" />
+	<!-- dir work -->
+	<property name="work.dir" value="${basedir}/work" />
+	<property name="compile.dir" value="${work.dir}/classes" />
+	<!-- jar -->
+	<property name="jar.name" value="${project.name}-${project.version}.jar" />
+	<property name="jar.starter.name" value="starter-${project.version}.jar" />
+	<property name="jar.dest.dir" value="${work.dir}/lib" />
+	<!-- dir target -->
+	<property name="target.dir" value="${basedir}/target" />
+
+	<property name="debug" value="false" />
+
+	<!-- =================================================== -->
+	<!-- path(s) pattern(s) -->
+	<!-- =================================================== -->
+
+	<path id="javadoc.dependencies">
+		<fileset dir="${lib.build.dir}" includes="*.jar" />
+		<fileset dir="${lib.merge.dir}" includes="*.jar" />
+	</path>
+
+	<path id="compile.dependencies">
+		<path refid="javadoc.dependencies" />
+	</path>
+
+	<patternset id="compile.sources">
+		<include name="**/*.java" />
+	</patternset>
+
+	<!-- =================================================== -->
+	<!-- targets -->
+	<!-- =================================================== -->
+
+
+
+	<target name="build" depends="init, build.starter,build.server">
+		<mkdir dir="${basedir}/conf" />
+		<mkdir dir="${target.dir}/lib" />
+		<copydir dest="${basedir}/conf" src="${src.conf.dir}" />
+		<copydir dest="${target.dir}/lib" src="${jar.dest.dir}" />
+		<!-- for debug!! -->
+		<mkdir dir="${work.dir}/conf" />
+		<copydir dest="${work.dir}/conf" src="${src.conf.dir}" />
+		<copydir dest="${compile.dir}" src="${lib.merge.dir}">
+			<include name="*.properties" />
+		</copydir>
+	</target>
+	<target name="clean" depends="init">
+		<delete dir="${work.dir}" />
+		<delete dir="${target.dir}" />
+	</target>
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${work.dir}" />
+		<mkdir dir="${target.dir}" />
+	</target>
+
+	<!-- make startup jar -->
+	<target name="build.starter" depends="init,compile">
+		<mkdir dir="${jar.dest.dir}" />
+		<jar jarfile="${jar.dest.dir}/${jar.starter.name}">
+			<fileset dir="${compile.dir}">
+				<include name="org/campooo/server/starter/ServerClassLoader*.class" />
+				<include name="org/campooo/server/starter/ServerStarter*.class" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.campooo.server.starter.ServerStarter" />
+				<attribute name="Build-By" value="campooo" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- make server jar -->
+	<target name="build.server" depends="init,compile">
+		<mkdir dir="${jar.dest.dir}" />
+		<jar jarfile="${jar.dest.dir}/${jar.name}">
+			<fileset dir="${compile.dir}">
+				<include name="**/*.class" />
+				<exclude name="org/campooo/server/starter/*" />
+			</fileset>
+			<fileset dir="${lib.merge.dir}" includes="*.properties" />
+			<zipgroupfileset dir="${lib.merge.dir}" includes="*.jar" />
+			<manifest>
+				<attribute name="Build-By" value="campooo" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="compile" depends="init">
+		<mkdir dir="${compile.dir}" />
+		<javac encoding="utf-8" destdir="${compile.dir}"
+			includeantruntime="no" debug="on">
+			<src path="${src.java.dir}" />
+			<patternset refid="compile.sources" />
+			<classpath>
+				<path refid="compile.dependencies" />
+			</classpath>
+		</javac>
+	</target>
+	<!-- =================================================== -->
+	<!-- run -->
+	<!-- =================================================== -->
+	<target name="run">
+		<java jar="${target.dir}/lib/${jar.starter.name}" fork="true"
+			dir="${target.dir}/lib">
+		</java>
+	</target>
+
+</project>
