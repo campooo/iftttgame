@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import org.campooo.api.module.Module;
-import org.campooo.api.module.ModuleBox;
 import org.campooo.app.Global;
 
 import java.lang.ref.WeakReference;
@@ -118,7 +117,7 @@ public class NetworkObserver extends BroadcastReceiver implements Module<Global>
     @Override
     public void initialize(Global global) {
         sGlobal = global;
-        sGlobal.registerReceiver(this, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        sGlobal.registerReceiver(this, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)); //TODO 对权限的统一申请
     }
 
     @Override

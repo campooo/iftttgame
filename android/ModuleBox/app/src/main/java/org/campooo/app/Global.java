@@ -13,6 +13,8 @@ import org.campooo.app.info.network.NetworkObserver;
 import java.util.Date;
 
 /**
+ * App的设备相关基础模块构建
+ * <p/>
  * ckb on 15/11/26.
  */
 public final class Global extends ModuleBox {
