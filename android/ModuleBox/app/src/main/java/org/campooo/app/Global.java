@@ -59,12 +59,8 @@ public final class Global extends ModuleBox {
      * 注册所有模块
      */
     private void loadModules() {
+        loadModule(DVMCrashHandler.class.getName()); //crash 要第一个被注册
         loadModule(NetworkObserver.class.getName());
-        loadModule(DVMCrashHandler.class.getName());
-    }
-
-    public void destroy() {
-        destroyModules();
     }
 
     public final static ConnectivityManager getConnectivityManager() {

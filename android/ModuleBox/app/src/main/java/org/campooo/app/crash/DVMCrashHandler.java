@@ -6,12 +6,17 @@ import org.campooo.app.Global;
 /**
  * ckb on 16/1/11.
  */
-public class DVMCrashHandler implements Module<Global>, Thread.UncaughtExceptionHandler {
+public class DVMCrashHandler implements Module<Global>, Thread.UncaughtExceptionHandler, Runnable {
 
     private Thread.UncaughtExceptionHandler otherCrashHandler;
 
+    public Global sGlobal;
+
+    private Thread shutdownThread;
+
     @Override
     public void initialize(Global box) {
+        sGlobal = box;
         otherCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -33,6 +38,14 @@ public class DVMCrashHandler implements Module<Global>, Thread.UncaughtException
     }
 
     private boolean handleException(Throwable ex) {
+        shutdownThread = new Thread(this, "Shutdown Thread");
+        shutdownThread.setDaemon(false);
+        shutdownThread.start();
         return false;
+    }
+
+    @Override
+    public void run() {
+        sGlobal.destroyModules();
     }
 }
