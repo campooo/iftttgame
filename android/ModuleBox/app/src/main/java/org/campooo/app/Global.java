@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.support.annotation.Nullable;
 
 import org.campooo.api.module.ModuleBox;
+import org.campooo.app.crash.DVMCrashHandler;
 import org.campooo.app.info.network.NetworkObserver;
 
 import java.util.Date;
@@ -59,6 +60,7 @@ public final class Global extends ModuleBox {
      */
     private void loadModules() {
         loadModule(NetworkObserver.class.getName());
+        loadModule(DVMCrashHandler.class.getName());
     }
 
     public void destroy() {
