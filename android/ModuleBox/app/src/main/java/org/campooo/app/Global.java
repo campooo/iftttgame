@@ -21,6 +21,7 @@ public final class Global extends ModuleBox {
 
     private static Context appContext = null;
 
+    private static Global instance = null;
     private Date startDate;
 
     public static Context getContext() {
@@ -34,12 +35,16 @@ public final class Global extends ModuleBox {
         Global.appContext = appContext;
     }
 
-    public Global(Context appContext) {
-        super(appContext.getClassLoader());
-        if (startDate != null) {
+    public static void init(Context appContext) {
+        setContext(appContext);
+        if (instance != null) {
             throw new RuntimeException("a Global already exists");
         }
-        setContext(appContext);
+        instance = new Global();
+    }
+
+    public Global() {
+        super(getContext().getClassLoader());
         initialize(this);
     }
 
