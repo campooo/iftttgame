@@ -1,1 +1,1 @@
-include ':app', ':QuickFox'
+include ':app'

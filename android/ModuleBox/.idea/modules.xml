@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ModuleBox.iml" filepath="$PROJECT_DIR$/ModuleBox.iml" />
-      <module fileurl="file://$PROJECT_DIR$/QuickFox/QuickFox.iml" filepath="$PROJECT_DIR$/QuickFox/QuickFox.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
