@@ -1,6 +1,7 @@
 package org.campooo.app.base;
 
 import android.app.Application;
+import android.os.SystemClock;
 import android.util.Log;
 
 import org.campooo.app.Global;
@@ -15,14 +16,6 @@ public class BaseApplication extends Application {
         super.onCreate();
 
         Global.init(this);
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                Log.i("shutding", "shutdown");
-            }
-        });
 
     }
 }

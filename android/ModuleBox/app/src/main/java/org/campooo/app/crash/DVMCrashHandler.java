@@ -48,7 +48,7 @@ public class DVMCrashHandler implements Module<Global>, Thread.UncaughtException
 
     @Override
     public void run() {
-        Log.i("DVMCrashHandler","vm shut downing");
+        Log.i("DVMCrashHandler", "uncatched exception happened");
         global.destroyModules();
     }
 }
