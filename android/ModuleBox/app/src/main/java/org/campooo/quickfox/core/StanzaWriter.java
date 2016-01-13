@@ -174,14 +174,19 @@ public class StanzaWriter implements Runnable {
     }
 
     void startKeepAliveProcess() {
-        int keepAliveInterval = QuickFoxConfiguration.getKeepAliveInterval();
-        if (keepAliveInterval > 0) {
-            KeepAliveStrategy task = new KeepAliveStrategy(keepAliveInterval);
-            keepAliveThread = new Thread(task);
-            task.setThread(keepAliveThread);
-            keepAliveThread.setDaemon(true);
-            keepAliveThread.setName("Keep Alive ( " + "quickfox" + " )");
-            keepAliveThread.start();
+        KeepAliveAlarmClock.setWriterAndStart(this);
+    }
+    
+    int keepAliveInterval = QuickFoxConfiguration.getKeepAliveInterval();
+
+    void sendBreatheStanza() {
+        if (System.currentTimeMillis() - lastActive >= keepAliveInterval) {
+            try {
+                writer.write(CRLF);
+                writer.flush();
+            } catch (Exception e) {
+                conn.closeOnError(e);
+            }
         }
     }
 
@@ -193,43 +198,43 @@ public class StanzaWriter implements Runnable {
         this.conn = conn;
     }
 
-    class KeepAliveStrategy implements Runnable {
-
-        private int delay;
-        private Thread thread;
-
-        public KeepAliveStrategy(int delay) {
-            this.delay = delay;
-        }
-
-        protected void setThread(Thread thread) {
-            this.thread = thread;
-        }
-
-        @Override
-        public void run() {
-            try {
-                // 预留程序启动时间
-                Thread.sleep(5000);
-            } catch (InterruptedException ie) {
-                // ignore
-            }
-            while (!done && keepAliveThread == thread) {
-                synchronized (writer) {
-                    if (System.currentTimeMillis() - lastActive >= delay) {
-                        try {
-                            writer.write(CRLF);
-                            writer.flush();
-                        } catch (Exception e) {
-                            conn.closeOnError(e);
-                        }
-                    }
-                }
-                SystemClock.sleep(delay);
-            }
-        }
-
-    }
+//    class KeepAliveStrategy implements Runnable {
+//
+//        private int delay;
+//        private Thread thread;
+//
+//        public KeepAliveStrategy(int delay) {
+//            this.delay = delay;
+//        }
+//
+//        protected void setThread(Thread thread) {
+//            this.thread = thread;
+//        }
+//
+//        @Override
+//        public void run() {
+//            try {
+//                // 预留程序启动时间
+//                Thread.sleep(5000);
+//            } catch (InterruptedException ie) {
+//                // ignore
+//            }
+//            while (!done && keepAliveThread == thread) {
+//                synchronized (writer) {
+//                    if (System.currentTimeMillis() - lastActive >= delay) {
+//                        try {
+//                            writer.write(CRLF);
+//                            writer.flush();
+//                        } catch (Exception e) {
+//                            conn.closeOnError(e);
+//                        }
+//                    }
+//                }
+//                SystemClock.sleep(delay);
+//            }
+//        }
+//
+//    }
 
     @Override
     public void run() {

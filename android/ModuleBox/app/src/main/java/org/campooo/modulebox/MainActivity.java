@@ -15,8 +15,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AlarmClock clock = new AlarmClock("haha", 8000, new TestAlarm());
-        AlarmClockCollector.startAlarm(clock);
+//        AlarmClock clock = new AlarmClock("haha", 8000, new TestAlarm());
+//        AlarmClockCollector.startAlarm(clock);
     }
 
 }

@@ -160,15 +160,17 @@ public class PushConnection extends Connection {
         connected = false;
         if (stanzaReader != null) {
             stanzaReader.shutdown();
+            stanzaReader.cleanup();
         }
         if (stanzaWriter != null) {
             stanzaWriter.shutdown();
+            stanzaWriter.cleanup();
         }
         SystemClock.sleep(1000);
         closeSocket();
-        stanzaWriter.cleanup();
+
         stanzaWriter = null;
-        stanzaReader.cleanup();
+
         stanzaReader = null;
     }
 

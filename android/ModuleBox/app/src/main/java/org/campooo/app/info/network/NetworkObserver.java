@@ -107,6 +107,11 @@ public class NetworkObserver extends BroadcastReceiver implements Module<Global>
         return getCurrState().getNetworkType() == NetworkType.WIFI;
     }
 
+    public static boolean isMobile() {
+        updateNetworkState();
+        return getCurrState().getNetworkType() == NetworkType.MOBILE;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
