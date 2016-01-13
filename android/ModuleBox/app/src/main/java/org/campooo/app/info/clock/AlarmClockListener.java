@@ -8,6 +8,10 @@ import android.content.Intent;
  */
 public interface AlarmClockListener {
 
-    public boolean onClockArrived(Context context , Intent intent);
+
+    /**
+     *  返回true 重置clock
+     */
+    public boolean onClockArrived(Context context, Intent intent);
 
 }

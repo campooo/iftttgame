@@ -1,41 +1,33 @@
 package org.campooo.app.info.clock;
 
 import android.app.PendingIntent;
+import android.os.Parcelable;
 
 /**
  * ckb on 16/1/11.
  */
-/* package */ class AlarmClock {
+public class AlarmClock {
 
-    public static final String ACTION_PREFIX = "org.campooo.alarm.";
-
-    private long clockId;
-
-    private String action;
+    private String name;
 
     private long interval = -1;
 
     private PendingIntent pendingIntent;
 
-    public AlarmClock(String action, int interval) {
-        setAction(ACTION_PREFIX + action);
+    private AlarmClockListener listener;
+
+    public AlarmClock(String name, int interval, AlarmClockListener listener) {
+        setName(name);
         setInterval(interval);
+        setListener(listener);
     }
 
-    public String getAction() {
-        return action;
+    public String getName() {
+        return name;
     }
 
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public long getClockId() {
-        return clockId;
-    }
-
-    public void setClockId(long clockId) {
-        this.clockId = clockId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getInterval() {
@@ -53,4 +45,15 @@ import android.app.PendingIntent;
     public void setPendingIntent(PendingIntent pendingIntent) {
         this.pendingIntent = pendingIntent;
     }
+
+    public AlarmClockListener getListener() {
+        return listener;
+    }
+
+    public void setListener(AlarmClockListener listener) {
+        this.listener = listener;
+    }
+
+    public static final String LISTENER_CLAZZ = "LISTENER";
+
 }

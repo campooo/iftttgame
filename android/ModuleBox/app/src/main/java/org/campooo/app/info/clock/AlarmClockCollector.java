@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.SystemClock;
 
 import org.campooo.api.module.Module;
@@ -32,51 +31,29 @@ public class AlarmClockCollector implements Module<Global> {
 
     }
 
-    public static <T extends AlarmClockListener> boolean startAlarm(int interval, T listener) {
+    public static boolean startAlarm(AlarmClock clock) {
         try {
             AlarmManager alarmManager = (AlarmManager) Global.getSystemService(Context.ALARM_SERVICE);
 
-            int alarmType = AlarmManager.ELAPSED_REALTIME_WAKEUP;
+            int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
 
-            long timeOrLengthofWait = SystemClock.elapsedRealtime() + interval;
+            long fireTime = SystemClock.elapsedRealtime() + clock.getInterval();
 
-            Intent intentToFire = new Intent(Global.getContext(), AlarmBroadcastReceiver.class);
-            intentToFire.setAction(listener.getClass().getName());
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(Global.getContext(), 0, intentToFire,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-//            clock.setPendingIntent(pendingIntent);
-
-            alarmManager.set(alarmType, timeOrLengthofWait, pendingIntent);
-
-            synchronized (AlarmClockCollector.class) {
-                ALARM_CLOCK_MAP.put(listener.getClass().getSimpleName(), null);
+            Intent intent = new Intent(Global.getContext(), AlarmBroadcastReceiver.class);
+            intent.setAction(clock.getName());
+            if (clock.getListener() != null) {
+                intent.putExtra(AlarmClock.LISTENER_CLAZZ, clock.getListener().getClass().getName());
             }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
-    public static boolean set(AlarmClock clock) {
-        try {
-            AlarmManager alarmManager = (AlarmManager) Global.getSystemService(Context.ALARM_SERVICE);
-
-            int alarmType = AlarmManager.ELAPSED_REALTIME_WAKEUP;
-
-            long timeOrLengthofWait = SystemClock.elapsedRealtime() + clock.getInterval();
-
-            Intent intentToFire = new Intent(clock.getAction());
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(Global.getContext(), 0, intentToFire,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent
+                    .getBroadcast(Global.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             clock.setPendingIntent(pendingIntent);
 
-            alarmManager.set(alarmType, timeOrLengthofWait, pendingIntent);
+            alarmManager.set(type, fireTime, pendingIntent);
 
             synchronized (AlarmClockCollector.class) {
-                ALARM_CLOCK_MAP.put(clock.getAction(), clock);
+                ALARM_CLOCK_MAP.put(clock.getName(), clock);
             }
             return true;
         } catch (Exception e) {
@@ -94,7 +71,7 @@ public class AlarmClockCollector implements Module<Global> {
         }
 
         synchronized (AlarmClockCollector.class) {
-            ALARM_CLOCK_MAP.remove(clock.getClockId());
+            ALARM_CLOCK_MAP.remove(clock.getName());
         }
     }
 
@@ -102,12 +79,12 @@ public class AlarmClockCollector implements Module<Global> {
         synchronized (AlarmClockCollector.class) {
             clock.setPendingIntent(null);
 
-            ALARM_CLOCK_MAP.remove(clock.getAction());
+            ALARM_CLOCK_MAP.remove(clock.getName());
         }
     }
 
-    public static AlarmClock getClock(String namePrefix) {
-        return ALARM_CLOCK_MAP.get(namePrefix);
+    public static AlarmClock getClock(String name) {
+        return ALARM_CLOCK_MAP.get(name);
     }
 
 }

@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.text.TextUtils;
+import android.util.Log;
 
 import org.campooo.app.Global;
 
@@ -35,9 +37,37 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void handleIntent(Context context, Intent intent) {
-        SystemClock.sleep(5000);
-        AlarmClockListener listener = (AlarmClockListener) Global.loadClass(context.getClassLoader(), intent.getAction());
-        listener.onClockArrived(context, intent);
+        String action = intent.getAction();
+
+        AlarmClock alarmClock = AlarmClockCollector.getClock(action);
+
+        AlarmClockListener listener = null;
+
+        if (alarmClock != null) {
+            listener = alarmClock.getListener();
+        } else {
+            String listenerName = intent.getStringExtra(AlarmClock.LISTENER_CLAZZ);
+            if (!TextUtils.isEmpty(listenerName)) {
+                Object listenerClazz = Global.loadClass(context.getClassLoader(), listenerName);
+                if (listenerClazz != null) {
+                    try {
+                        listener = AlarmClockListener.class.cast(listenerClazz);
+                    } catch (ClassCastException cce) {
+                        Log.e("AlarmBroadcastReceiver", action + " listener not found");
+                    }
+                }
+            }
+        }
+
+        if (listener != null) {
+            boolean proceed = listener.onClockArrived(context, intent);
+            if (proceed) {
+                AlarmClockCollector.startAlarm(alarmClock);
+            } else {
+                AlarmClockCollector.cancel(alarmClock);
+            }
+        }
+
     }
 
 }
