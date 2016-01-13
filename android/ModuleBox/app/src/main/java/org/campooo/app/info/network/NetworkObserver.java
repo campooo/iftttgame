@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import org.campooo.api.module.Module;
 import org.campooo.app.Global;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class NetworkObserver extends BroadcastReceiver implements Module<Global> {
 
-    private static Global sGlobal = null;
+    private Global global = null;
 
     private static NetworkState currState;
     private static NetworkState lastState;
@@ -53,14 +54,13 @@ public class NetworkObserver extends BroadcastReceiver implements Module<Global>
         synchronized (NetworkObserver.class) {
             NetworkInfo networkInfo = null;
             try {
-                ConnectivityManager connectivityManager = Global.getConnectivityManager();
+                ConnectivityManager connectivityManager = (ConnectivityManager) Global.getSystemService(Context.CONNECTIVITY_SERVICE);
                 networkInfo = connectivityManager.getActiveNetworkInfo();
             } catch (Exception e) {
                 networkInfo = null;
             }
 
             boolean changed = setCurrState(NetworkState.fromNetworkInfo(networkInfo));
-
             if (changed) {
                 notifyNetworkStateChange();
             }
@@ -77,7 +77,7 @@ public class NetworkObserver extends BroadcastReceiver implements Module<Global>
     }
 
     private static void notifyNetworkStateChange() {
-        //FIXME
+        Log.i("NetworkObserver", "network change from " + getLastState() + " to " + getCurrState());
         synchronized (listeners) {
             for (WeakReference<NetworkStateListener> weakReference : listeners) {
                 NetworkStateListener listener = weakReference.get();
@@ -115,13 +115,13 @@ public class NetworkObserver extends BroadcastReceiver implements Module<Global>
     }
 
     @Override
-    public void initialize(Global global) {
-        sGlobal = global;
-        sGlobal.registerReceiver(this, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)); //TODO 对权限的统一申请
+    public void initialize(Global box) {
+        global = box;
+        global.registerReceiver(this, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)); //TODO 对权限的统一申请
     }
 
     @Override
     public void destroy() {
-        sGlobal.unregisterReceiver(this);
+        global.unregisterReceiver(this);
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * ckb on 16/1/7.
@@ -12,7 +13,7 @@ public abstract class ModuleBox {
 
     private ClassLoader loader = null;
 
-    private Map<Class<?>, Module> modules = new LinkedHashMap<Class<?>, Module>();
+    private Map<Class<?>, Module> modules = new ConcurrentHashMap<Class<?>, Module>();
 
     public ModuleBox(ClassLoader loader) {
         this.loader = loader;

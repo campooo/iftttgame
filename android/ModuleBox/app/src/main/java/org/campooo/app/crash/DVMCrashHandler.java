@@ -10,13 +10,13 @@ public class DVMCrashHandler implements Module<Global>, Thread.UncaughtException
 
     private Thread.UncaughtExceptionHandler otherCrashHandler;
 
-    public Global sGlobal;
+    public Global global;
 
     private Thread shutdownThread;
 
     @Override
     public void initialize(Global box) {
-        sGlobal = box;
+        global = box;
         otherCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -46,6 +46,6 @@ public class DVMCrashHandler implements Module<Global>, Thread.UncaughtException
 
     @Override
     public void run() {
-        sGlobal.destroyModules();
+        global.destroyModules();
     }
 }

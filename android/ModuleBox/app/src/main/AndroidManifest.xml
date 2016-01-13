@@ -3,6 +3,9 @@
     package="org.campooo"
     android:sharedUserId="org.campooo">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".app.base.BaseApplication"
         android:allowBackup="true"
@@ -18,6 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".app.info.network.NetworkObserver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".app.info.clock.AlarmBroadcastReceiver" />
     </application>
 
 </manifest>

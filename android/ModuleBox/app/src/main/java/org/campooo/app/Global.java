@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import org.campooo.api.module.Module;
 import org.campooo.api.module.ModuleBox;
 import org.campooo.app.crash.DVMCrashHandler;
+import org.campooo.app.info.clock.AlarmClockCollector;
 import org.campooo.app.info.network.NetworkObserver;
 
 import java.util.Date;
@@ -55,16 +59,33 @@ public final class Global extends ModuleBox {
         initModules();
     }
 
+    public static Object loadClass(ClassLoader loader, String clazzFullName) {
+        try {
+            Class<?> modClass = loader.loadClass(clazzFullName);
+            Object mod = modClass.newInstance();
+            return mod;
+        } catch (Exception e) {
+            Log.e(" class load error [" + clazzFullName + "]", e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * 注册所有模块
      */
     private void loadModules() {
         loadModule(DVMCrashHandler.class.getName()); //crash 要第一个被注册
+        loadModule(AlarmClockCollector.class.getName());
         loadModule(NetworkObserver.class.getName());
     }
 
-    public final static ConnectivityManager getConnectivityManager() {
-        return (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+    public AlarmClockCollector getAlarmCollector() {
+        return (AlarmClockCollector) getModuleByName(AlarmClockCollector.class.getSimpleName());
+    }
+
+    public final static Object getSystemService(@NonNull String name) {
+        return getContext().getSystemService(name);
     }
 
     public final Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
