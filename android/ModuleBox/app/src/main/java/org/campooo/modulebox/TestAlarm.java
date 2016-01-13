@@ -13,6 +13,6 @@ public class TestAlarm implements AlarmClockListener {
     @Override
     public boolean onClockArrived(Context context, Intent intent) {
         Toast.makeText(context, "aaa", Toast.LENGTH_SHORT).show();
-        return false;
+        return true;
     }
 }

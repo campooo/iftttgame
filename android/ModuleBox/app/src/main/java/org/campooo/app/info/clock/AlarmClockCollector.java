@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.SystemClock;
 
 import org.campooo.api.module.Module;
@@ -35,22 +36,30 @@ public class AlarmClockCollector implements Module<Global> {
         try {
             AlarmManager alarmManager = (AlarmManager) Global.getSystemService(Context.ALARM_SERVICE);
 
-            int type = AlarmManager.ELAPSED_REALTIME_WAKEUP;
+            int alarmType = AlarmManager.ELAPSED_REALTIME_WAKEUP;
 
             long fireTime = SystemClock.elapsedRealtime() + clock.getInterval();
 
             Intent intent = new Intent(Global.getContext(), AlarmBroadcastReceiver.class);
             intent.setAction(clock.getName());
+            /**
+             * 这么做会触发android的bug，class not found
+             *
+             * intent.setExtrasClassLoader(AlarmClock.class.getClassLoader());
+             * intent.putExtra(AlarmClock.INSTANCE, clock);
+             */
+            Bundle hackBundle = new Bundle();
+            hackBundle.putParcelable(AlarmClock.INSTANCE, clock);
             if (clock.getListener() != null) {
-                intent.putExtra(AlarmClock.LISTENER_CLAZZ, clock.getListener().getClass().getName());
+                hackBundle.putString(AlarmClock.LISTENER_CLAZZ, clock.getListener().getClass().getName());
             }
+            intent.putExtra("extraBundle", hackBundle);
 
             PendingIntent pendingIntent = PendingIntent
                     .getBroadcast(Global.getContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
             clock.setPendingIntent(pendingIntent);
 
-            alarmManager.set(type, fireTime, pendingIntent);
+            alarmManager.set(alarmType, fireTime, pendingIntent);
 
             synchronized (AlarmClockCollector.class) {
                 ALARM_CLOCK_MAP.put(clock.getName(), clock);

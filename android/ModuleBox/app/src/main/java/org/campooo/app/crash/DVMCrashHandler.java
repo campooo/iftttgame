@@ -1,5 +1,7 @@
 package org.campooo.app.crash;
 
+import android.util.Log;
+
 import org.campooo.api.module.Module;
 import org.campooo.app.Global;
 
@@ -46,6 +48,7 @@ public class DVMCrashHandler implements Module<Global>, Thread.UncaughtException
 
     @Override
     public void run() {
+        Log.i("DVMCrashHandler","vm shut downing");
         global.destroyModules();
     }
 }
