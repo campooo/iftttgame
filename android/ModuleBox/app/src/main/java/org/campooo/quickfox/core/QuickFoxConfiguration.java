@@ -1,4 +1,4 @@
-package org.campooo.quickfox;
+package org.campooo.quickfox.core;
 
 public class QuickFoxConfiguration {
 

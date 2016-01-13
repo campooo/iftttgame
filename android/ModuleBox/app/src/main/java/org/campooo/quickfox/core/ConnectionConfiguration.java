@@ -1,4 +1,4 @@
-package org.campooo.quickfox;
+package org.campooo.quickfox.core;
 
 public class ConnectionConfiguration {
 
@@ -23,8 +23,8 @@ public class ConnectionConfiguration {
     }
 
     private void init(String host, int port) {
-        this.host = host;
-        this.port = port;
+        setHost(host);
+        setPort(port);
     }
 
     public String getHost() {

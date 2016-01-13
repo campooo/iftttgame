@@ -1,4 +1,4 @@
-package org.campooo.quickfox;
+package org.campooo.quickfox.core;
 
 /**
  * 链接的变化全靠它监听

@@ -14,6 +14,7 @@ import org.campooo.api.module.ModuleBox;
 import org.campooo.app.crash.DVMCrashHandler;
 import org.campooo.app.info.clock.AlarmClockCollector;
 import org.campooo.app.info.network.NetworkObserver;
+import org.campooo.quickfox.PushService;
 
 import java.util.Date;
 
@@ -57,6 +58,8 @@ public final class Global extends ModuleBox {
         startDate = new Date();
         loadModules();
         initModules();
+
+        PushService.startPushService(getContext());
     }
 
     public static Object loadClass(ClassLoader loader, String clazzFullName) {

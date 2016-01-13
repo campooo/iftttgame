@@ -1,4 +1,4 @@
-package org.campooo.quickfox;
+package org.campooo.quickfox.core;
 
 import org.campooo.quickfox.stanza.Stanza;
 

@@ -1,4 +1,4 @@
-package org.campooo.quickfox;
+package org.campooo.quickfox.core;
 
 import android.os.SystemClock;
 
@@ -16,16 +16,22 @@ public class PushConnection extends Connection {
 
     private static final Logger Log = QLog.getLogger(PushConnection.class);
 
+    private static final String HOST = "www.campooo.org";
+    private static final int PORT = 8380;
+
     String connectionID = null;
     private boolean connected = false;
 
 
     private SocketFactory socketFactory;
 
-
     // 发送器和接收器
     StanzaWriter stanzaWriter;
     StanzaReader stanzaReader;
+
+    public PushConnection() {
+        this(new ConnectionConfiguration(HOST, PORT));
+    }
 
     public PushConnection(ConnectionConfiguration config) {
         super(config);

@@ -1,7 +1,8 @@
-package org.campooo.quickfox;
+package org.campooo.quickfox.core;
 
 import android.os.SystemClock;
 
+import org.campooo.app.Global;
 import org.campooo.quickfox.log.Logger;
 import org.campooo.quickfox.log.QLog;
 import org.campooo.quickfox.stanza.Stanza;
