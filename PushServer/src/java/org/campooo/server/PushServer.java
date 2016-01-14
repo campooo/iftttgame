@@ -206,16 +206,10 @@ public final class PushServer {
 	 */
 	private void loadModules() {
 		loadModule(ConnectionManagerImpl.class.getName());
-		// loadModule(PacketDelivererImpl.class.getName());
-		// loadModule(PacketRouterImpl.class.getName());
-		// loadModule(RawTextRouter.class.getName());
-		// loadModule(RoutingTableImpl.class.getName());
-		// loadModule(SessionManager.class.getName());
-		// loadModule(IQRouter.class.getName());
-		// loadModule(PresenceRouter.class.getName());
-		// loadModule(MessageRouter.class.getName());
-		// loadModule(IQUserHandler.class.getName());
-		// loadModule(UserManager.class.getName());
+		loadModule(SessionManager.class.getName());
+		loadModule(StanzaDelivererImpl.class.getName());
+		loadModule(RoutingTableImpl.class.getName());
+		loadModule(StanzaRouterImpl.class.getName());
 	}
 
 	/**
@@ -403,7 +397,7 @@ public final class PushServer {
 	}
 
 	public StanzaRouter getStanzaRouter() {
-		return (StanzaRouter) modules.get(StanzaRouter.class);
+		return (StanzaRouter) modules.get(StanzaRouterImpl.class);
 	}
 
 	public RoutingTable getRoutingTable() {

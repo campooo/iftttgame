@@ -15,8 +15,10 @@ import com.google.gson.Gson;
 public class StanzaParser {
 	private static final Logger Log = Logger.getLogger(StanzaParser.class);
 
+	private Gson gsonParser = new Gson();
+
 	public Stanza parse(String stanzaStr) {
-		Stanza stanza = new Gson().fromJson(stanzaStr, RawTextStanza.class);
+		Stanza stanza = gsonParser.fromJson(stanzaStr, RawTextStanza.class);
 
 		return stanza;
 	}

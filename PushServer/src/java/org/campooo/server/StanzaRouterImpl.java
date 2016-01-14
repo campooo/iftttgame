@@ -20,8 +20,8 @@ public class StanzaRouterImpl extends BaseModule implements StanzaRouter {
 
 	@Override
 	public void route(Stanza stanza) {
-		String text = (	(RawTextStanza)stanza).getText();
-		
+		String text = ((RawTextStanza) stanza).getText();
+		Log.info(text);
 	}
 
 	@Override
