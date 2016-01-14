@@ -1,5 +1,7 @@
 package org.campooo.quickfox.stanza;
 
+import com.google.gson.Gson;
+
 import org.campooo.quickfox.log.Logger;
 import org.campooo.quickfox.log.QLog;
 
@@ -12,6 +14,8 @@ public class StanzaParser {
     public static final Logger Log = QLog.getLogger(StanzaParser.class);
 
     private BufferedReader reader;
+
+    private static final Gson GSON = new Gson();
 
     public StanzaParser(BufferedReader reader) {
 
@@ -35,7 +39,7 @@ public class StanzaParser {
     }
 
     private Stanza parseStanza(String src) {
-        return new Stanza(src);
+        return GSON.fromJson(src, RawTextStanza.class);
     }
 
     public void setReader(BufferedReader reader) {

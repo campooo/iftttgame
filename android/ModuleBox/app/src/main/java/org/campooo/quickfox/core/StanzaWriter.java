@@ -2,6 +2,8 @@ package org.campooo.quickfox.core;
 
 import android.os.SystemClock;
 
+import com.google.gson.Gson;
+
 import org.campooo.app.Global;
 import org.campooo.quickfox.log.Logger;
 import org.campooo.quickfox.log.QLog;
@@ -20,6 +22,8 @@ public class StanzaWriter implements Runnable {
     private static final String CRLF = "\r\n";
 
     public static final String CHARSET = "utf-8";
+
+    public static final Gson GSON = new Gson();
 
     private Thread writerThread;
     private Thread keepAliveThread;
@@ -75,7 +79,7 @@ public class StanzaWriter implements Runnable {
                 Stanza stanza = nextStanza();
                 if (stanza != null) {
                     synchronized (writer) {
-                        writer.write(stanza.getService());
+                        writer.write(GSON.toJson(stanza));
                         writer.write(CRLF);
                         writer.flush();
                         lastActive = System.currentTimeMillis();
@@ -176,7 +180,7 @@ public class StanzaWriter implements Runnable {
     void startKeepAliveProcess() {
         KeepAliveAlarmClock.setWriterAndStart(this);
     }
-    
+
     int keepAliveInterval = QuickFoxConfiguration.getKeepAliveInterval();
 
     void sendBreatheStanza() {

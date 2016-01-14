@@ -79,6 +79,7 @@ public final class Global extends ModuleBox {
      */
     private void loadModules() {
         loadModule(DVMCrashHandler.class.getName()); //crash 要第一个被注册
+        loadModule(Device.class.getName());
         loadModule(AlarmClockCollector.class.getName());
         loadModule(NetworkObserver.class.getName());
     }

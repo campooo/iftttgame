@@ -4,6 +4,7 @@ import android.os.SystemClock;
 
 import org.campooo.quickfox.log.Logger;
 import org.campooo.quickfox.log.QLog;
+import org.campooo.quickfox.stanza.RawTextStanza;
 import org.campooo.quickfox.stanza.Stanza;
 
 import java.io.IOException;
@@ -16,7 +17,8 @@ public class PushConnection extends Connection {
 
     private static final Logger Log = QLog.getLogger(PushConnection.class);
 
-    private static final String HOST = "www.campooo.org";
+//    private static final String HOST = "www.campooo.org";
+    private static final String HOST = "192.168.14.197";
     private static final int PORT = 8380;
 
     String connectionID = null;
@@ -142,7 +144,9 @@ public class PushConnection extends Connection {
 
     @Override
     public void send(String rawText) {
-        send(new Stanza(rawText));
+        RawTextStanza rowTextStanza = new RawTextStanza();
+        rowTextStanza.setText(rawText);
+        send(rowTextStanza);
     }
 
 

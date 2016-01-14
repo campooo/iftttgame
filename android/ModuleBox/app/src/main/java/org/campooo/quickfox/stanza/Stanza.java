@@ -6,56 +6,41 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-/**
- * ckb on 15/11/17.
- */
-public class Stanza {
+public abstract class Stanza {
 
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.CHINA);
 
-    private static long id = 0;
+    private static long nextId = 0;
 
-    protected String stanzaId = "";
-    protected String type = "";
-    protected String service = "";
+    protected String id = "";
     protected String from = "";
     protected String to = "";
+
+    protected String streamId = "";
 
     private static final String prefix = StringUtils.randomString(5) + "-";
 
     private static String nextID() {
-        return prefix + Long.toString(id++);
+        return prefix + Long.toString(nextId++);
     }
 
-    public String getStanzaId() {
-        if (StringUtils.isEmpty(stanzaId)) {
-            stanzaId = nextID();
+    public String getStreamId() {
+        return streamId;
+    }
+
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
+    }
+
+    public String getId() {
+        if (StringUtils.isEmpty(id)) {
+            id = nextID();
         }
-        return stanzaId;
+        return id;
     }
 
-    public Stanza(String src) {
-        setService(src);
-    }
-
-    public void setStanzaId(String stanzaId) {
-        this.stanzaId = stanzaId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getService() {
-        return service;
-    }
-
-    public void setService(String service) {
-        this.service = service;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getFrom() {
@@ -84,13 +69,7 @@ public class Stanza {
 
         Stanza stanza = (Stanza) o;
 
-        if (stanzaId != null ? !stanzaId.equals(stanza.getStanzaId()) : stanza.getStanzaId() != null) {
-            return false;
-        }
-        if (type != null ? !type.equals(stanza.getType()) : stanza.getType() != null) {
-            return false;
-        }
-        if (service != null ? !service.equals(stanza.getService()) : stanza.getService() != null) {
+        if (id != null ? !id.equals(stanza.getId()) : stanza.getId() != null) {
             return false;
         }
         if (from != null ? !from.equals(stanza.getFrom()) : stanza.getFrom() != null) {
@@ -99,14 +78,4 @@ public class Stanza {
         return (to != null ? !to.equals(stanza.getTo()) : stanza.getTo() != null);
     }
 
-    @Override
-    public String toString() {
-        return "Stanza{" +
-                "stanzaId='" + stanzaId + '\'' +
-                ", type='" + type + '\'' +
-                ", service='" + service + '\'' +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                '}';
-    }
 }

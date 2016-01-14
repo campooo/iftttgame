@@ -3,28 +3,43 @@ package org.campooo.quickfox;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import org.campooo.app.Global;
 import org.campooo.quickfox.core.Connection;
 import org.campooo.quickfox.core.ConnectionListener;
 import org.campooo.quickfox.core.PushConnection;
+import org.campooo.quickfox.log.Logger;
+import org.campooo.quickfox.log.QLog;
 
 /**
  * ckb on 16/1/13.
  */
 public class PushService extends Service {
 
+    private static final Logger Log = QLog.getLogger(PushConnection.class);
+
     private static final String START_ACTION = "START_PUSH";
     private static final String STOP_ACTION = "STOP_PUSH";
 
     private PushConnection pushConn = null;
 
+
+    private final IBinder mBinder = new PushBinder();
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
+    }
+
+    public class PushBinder extends Binder {
+        public PushService getService() {
+            return PushService.this;
+        }
     }
 
     public final static void startPushService(Context context) {
@@ -80,6 +95,10 @@ public class PushService extends Service {
 
     }
 
+    public void sendRawText(String text) {
+        pushConn.send(text);
+    }
+
 
     @Override
     public void onDestroy() {
@@ -90,7 +109,6 @@ public class PushService extends Service {
     private ConnectionListener connListener = new ConnectionListener() {
         @Override
         public void connectionCreated(Connection conn) {
-
         }
 
         @Override
@@ -105,7 +123,7 @@ public class PushService extends Service {
 
         @Override
         public void connectionClosed() {
-
+            Log.debug("connectionClose");
         }
 
         @Override

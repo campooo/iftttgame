@@ -1,18 +1,25 @@
 package org.campooo.app;
 
 import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import org.campooo.api.module.Module;
 import org.campooo.app.info.network.NetworkObserver;
+
+import java.util.UUID;
 
 /**
  * ckb on 16/1/11.
  */
-public class Device {
+public final class Device implements Module<Global> {
 
-    private static String mDeviceInfo;
+    public static String DEVICE_INFO;
+    public static String MAC_ADDRESS;
 
     public static String updateDeviceInfo() {
         WindowManager manager = (WindowManager) Global.getSystemService(Context.WINDOW_SERVICE);
@@ -49,16 +56,41 @@ public class Device {
             builder.append("sddouble=").append("0").append('&');
             builder.append("display=").append(displayMetrics.widthPixels).append('*')
                     .append(displayMetrics.heightPixels).append('&');
-            builder.append("manu=").append(android.os.Build.MANUFACTURER).append('&');
+            builder.append("manu=").append(android.os.Build.MANUFACTURER)/*.append('&')*/;
 //            builder.append("wifi=").append(WifiDash.getWifiInfo()).append('&');
 //            builder.append("storage=").append(getStorageInfo()).append('&');
 //            builder.append("cell=").append(NetworkDash.getCellLevel()).append('&');
 
         }
 
-        mDeviceInfo = builder.toString();
+        DEVICE_INFO = builder.toString();
 
-        return mDeviceInfo;
+        return DEVICE_INFO;
     }
 
+    public static void updateMacAddress() {
+        try {
+            if (Build.VERSION.SDK_INT >= 23) {
+                MAC_ADDRESS = Console.execute("getprop ro.boot.wifimacaddr", 10000);
+            } else {
+                WifiManager wifi = (WifiManager) Global.getSystemService(Context.WIFI_SERVICE);
+                WifiInfo info = wifi.getConnectionInfo();
+                MAC_ADDRESS = info.getMacAddress();
+            }
+
+        } catch (Exception e) {
+            // no-op
+        }
+    }
+
+    @Override
+    public void initialize(Global box) {
+        updateDeviceInfo();
+        updateMacAddress();
+    }
+
+    @Override
+    public void destroy() {
+
+    }
 }
