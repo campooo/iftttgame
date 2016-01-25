@@ -4,15 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.campooo.api.module.Module;
 import org.campooo.api.module.ModuleBox;
 import org.campooo.app.crash.DVMCrashHandler;
-import org.campooo.app.info.clock.AlarmClockCollector;
+import org.campooo.app.info.alarmclock.AlarmClockCollector;
 import org.campooo.app.info.network.NetworkObserver;
 import org.campooo.quickfox.PushService;
 

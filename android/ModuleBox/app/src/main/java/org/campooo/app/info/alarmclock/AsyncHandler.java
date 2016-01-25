@@ -1,4 +1,4 @@
-package org.campooo.app.info.clock;
+package org.campooo.app.info.alarmclock;
 
 import android.os.Handler;
 import android.os.HandlerThread;

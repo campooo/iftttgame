@@ -3,9 +3,9 @@ package org.campooo.quickfox.core;
 import android.content.Context;
 import android.content.Intent;
 
-import org.campooo.app.info.clock.AlarmClock;
-import org.campooo.app.info.clock.AlarmClockCollector;
-import org.campooo.app.info.clock.AlarmClockListener;
+import org.campooo.app.info.alarmclock.AlarmClock;
+import org.campooo.app.info.alarmclock.AlarmClockCollector;
+import org.campooo.app.info.alarmclock.AlarmClockListener;
 import org.campooo.quickfox.PushService;
 
 /**

@@ -35,7 +35,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".app.info.clock.AlarmBroadcastReceiver" />
+        <receiver android:name=".app.info.alarmclock.AlarmBroadcastReceiver" />
 
         <service android:name=".app.accessibility.MyAccessibilityService" android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>

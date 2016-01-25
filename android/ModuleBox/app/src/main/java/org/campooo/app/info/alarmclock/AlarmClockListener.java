@@ -1,4 +1,4 @@
-package org.campooo.app.info.clock;
+package org.campooo.app.info.alarmclock;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import android.content.Intent;
  * ckb on 16/1/12.
  */
 public interface AlarmClockListener {
-
 
     /**
      *  返回true 重置clock

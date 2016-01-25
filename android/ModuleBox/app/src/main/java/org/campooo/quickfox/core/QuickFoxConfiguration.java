@@ -5,7 +5,7 @@ public class QuickFoxConfiguration {
     private static final String VERSION = "1.0";
 
     private static int defaultReplyTimeout = 5000;
-    private static int keepAliveInterval = 5 * 1000;
+    private static int keepAliveInterval = 60 * 1000;
 
     public static boolean DEBUG_ENABLED = true;
 
